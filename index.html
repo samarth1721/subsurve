@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SubSurve - Water Surveillance Demo</title>
+  <style>
+    :root {
+      --bg-dark: #121212;
+      --card-bg: #1e1e1e;
+      --primary: #00e5ff;
+      --accent: #b71c1c;
+      --text: #e0f2f1;
+      --dim: #757575;
+      --highlight: #4dd0e1;
+      --note-bg: #37474f;
+      --note-border: #ffb74d;
+      --button-bg: #00acc1;
+      --button-hover: #00838f;
+      --max-width: 480px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+      padding: 5vw;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+      padding-bottom: 3vw;
+    }
+
+    header h1 {
+      font-size: 5vw;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    #covertTrigger {
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 5vw;
+      cursor: pointer;
+      padding: 0.5vw 1vw;
+    }
+
+    #covertTrigger:hover {
+      color: #ff5252;
+    }
+
+    .status {
+      background: #263238;
+      padding: 4vw;
+      border-radius: 8px;
+      margin-top: 5vw;
+      transition: background-color 0.3s ease;
+    }
+
+    .status h2 {
+      font-size: 4.5vw;
+      color: var(--highlight);
+      margin-top: 0;
+    }
+
+    .status-text {
+      font-size: 4.2vw;
+      font-weight: 500;
+    }
+
+    .camera-section {
+      text-align: center;
+      margin-top: 5vw;
+    }
+
+    #cameraButton {
+      background-color: var(--button-bg);
+      border: none;
+      color: white;
+      padding: 3vw 6vw;
+      font-size: 4.5vw;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+    }
+
+    #cameraButton:hover {
+      background-color: var(--button-hover);
+    }
+
+    .description,
+    .note {
+      margin-top: 6vw;
+    }
+
+    .description h2 {
+      font-size: 4.8vw;
+      color: #4db6ac;
+    }
+
+    .description ul {
+      padding-left: 6vw;
+    }
+
+    .description li {
+      margin-bottom: 3vw;
+      font-size: 4vw;
+    }
+
+    .note {
+      background-color: var(--note-bg);
+      padding: 4vw;
+      border-left: 4px solid var(--note-border);
+      border-radius: 6px;
+    }
+
+    .note h3 {
+      margin-top: 0;
+      color: #ffe082;
+      font-size: 4.5vw;
+    }
+
+    .note p {
+      font-size: 4vw;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 8vw;
+      font-size: 3.5vw;
+      color: var(--dim);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>SubSurve</h1>
+      <button id="covertTrigger" title="System Check">&#9673;</button>
+    </header>
+
+    <main>
+      <section class="status">
+        <h2>System Status</h2>
+        <p class="status-text">Monitoring area... No activity detected.</p>
+      </section>
+
+      <section class="camera-section">
+        <button id="cameraButton">📷 Camera View</button>
+      </section>
+
+      <section class="description">
+        <h2>System Overview</h2>
+        <ul>
+          <li><strong>Detection:</strong> Ultrasonic sensor monitors the area in real-time.</li>
+          <li><strong>Alert:</strong> A buzzer and LED emit Morse code when an object is detected.</li>
+          <li><strong>Notification:</strong> Alerts are sent to your connected mobile device (via Bluetooth/Wi-Fi).</li>
+          <li><strong>Camera:</strong> Captures a 360° surveillance view, including top and bottom (coming soon).</li>
+        </ul>
+      </section>
+
+      <section class="note">
+        <h3>Demo Mode</h3>
+        <p>This interface simulates the SubSurve system for demonstration. Hardware integration will enable real-time detection and visual capture.</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>SubSurve Prototype v1.0 – Confidential</p>
+    </footer>
+  </div>
+
+  <script>
+    const covertBtn = document.getElementById('covertTrigger');
+    const cameraBtn = document.getElementById('cameraButton');
+    const statusText = document.querySelector('.status-text');
+    const statusBox = document.querySelector('.status');
+
+    let isAlertActive = false;
+
+    covertBtn.addEventListener('click', () => {
+      if (!isAlertActive) {
+        alert('🚨 Alert: Object detected near water source!');
+        statusText.textContent = '⚠️ Object Detected! Sending Morse Signal...';
+        statusBox.style.backgroundColor = '#b71c1c';
+        isAlertActive = true;
+      } else {
+        statusText.textContent = 'Monitoring area... No activity detected.';
+        statusBox.style.backgroundColor = '#263238';
+        isAlertActive = false;
+      }
+    });
+
+    cameraBtn.addEventListener('click', () => {
+      alert('📷 Camera functionality clicked. This gives a 360° (including top and bottom) view of the surveillance device.');
+    });
+  </script>
+</body>
+</html>
